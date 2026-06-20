@@ -1,0 +1,129 @@
+<html>
+<head>
+    <title>Hakkımızda</title>
+    <style>
+        /* Reset ve Tam Uyum */
+        body, html {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            box-sizing: border-box;
+            font-family: Arial, Helvetica, sans-serif;
+            background-color: transparent; 
+            overflow: hidden; 
+        }
+
+        /* Ortalanmış Başlık */
+        .metin-başlık {
+            text-align: center;
+            color: white;
+            text-shadow: 1px 1px 2px black, 0 0 15px #11998e, 0 0 5px black;
+            font-family: 'Curlz MT', cursive, sans-serif;
+            font-weight: bold;
+            font-size: 24pt;
+            margin-top: 10px;
+            margin-bottom: 20px;
+            letter-spacing: 2px;
+        }
+
+        /* Yan Yana Duran 3 Sütun İçin Flexbox */
+        .ekip-kapsayici {
+            display: flex;
+            justify-content: space-between;
+            align-items: stretch; 
+            width: 100%;
+            padding: 0 15px;
+            box-sizing: border-box;
+            gap: 15px;
+        }
+
+        /* Her Bir Kişinin Profil Kartı (Ortak Özellikler) */
+        .kisi-karti {
+            flex: 1; 
+            border-radius: 12px;
+            padding: 20px 15px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            box-shadow: 2px 2px 10px rgba(0,0,0,0.2);
+            border: 1px solid rgba(255,255,255,0.6);
+            max-height: 380px; 
+            overflow-y: auto; 
+        }
+
+        /* YENİ: Ekip Üyelerine Özel Pastel Arka Planlar (Cam Efektli) */
+        .karti-beste {
+            background: rgba(255, 204, 179, 0.85); /* Pastel Yavruağzı */
+        }
+        .karti-sibel {
+            background: rgba(200, 240, 205, 0.85); /* Pastel Açık Yeşil */
+        }
+        .karti-harun {
+            background: rgba(190, 230, 255, 0.85); /* Pastel Açık Mavi */
+        }
+
+        /* Kart İçi Scrollbar (İnce ve Zarif) */
+        .kisi-karti::-webkit-scrollbar { width: 5px; }
+        .kisi-karti::-webkit-scrollbar-thumb { background: rgba(0,0,0,0.2); border-radius: 5px; }
+
+        /* Yuvarlak Profil Resimleri */
+        .img {
+            width: 110px;
+            height: 110px;
+            border-radius: 50%; 
+            border: 4px solid #fff;
+            box-shadow: 0px 4px 8px rgba(0,0,0,0.3);
+            object-fit: cover; 
+            margin-bottom: 12px;
+            transition: transform 0.3s ease;
+        }
+        .img:hover {
+            transform: scale(1.08); 
+        }
+
+        /* İsim Vurgusu */
+        .isim {
+            font-size: 12pt;
+            color: #111;
+            margin-bottom: 10px;
+            border-bottom: 2px solid rgba(0,0,0,0.2);
+            padding-bottom: 5px;
+            text-align: center;
+            width: 100%;
+        }
+
+        /* Metin Stili */
+        .metin {
+            color: #222; 
+            font-size: 9.5pt;
+            line-height: 1.5;
+            text-align: justify;
+            margin: 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="metin-başlık">EKİBİMİZ</div>
+    
+    <div class="ekip-kapsayici">
+        <div class="kisi-karti karti-beste">
+            <a href="beste.png" target="_blank"><img class="img" src="beste.png"></a>
+            <b class="isim">Beste YAŞAROĞLU</b>
+            <p class="metin">Ben Beste YAŞAROĞLU, 9. sınıf öğrencisiyim. Bilnet Karşıyaka Fen Lisesi’nde okuyorum. Çiğli Aydoğan Yağcı BİLSEM öğrencisiyim. Kodlamaya, tasarımlar oluşturmaya ilgiliyim. Ayrıca uzun süredir gitar çalıyorum ve uluslararası jimnastik yarışmalarına katıldım. Daha önce de Tübitak 4006-B sergisi, Tübitak 2204-A yarışmaları, Teknofest projelerinde, Erasmus+ Okul Eğitimi Akreditasyonu ve e-Twinning projelerinde görev aldım. 2023'te takımımla yaptığımız Teknofest projesi Türkiye birinciliğiyle ödüllendirildi. Takım projelerinde yer almak beni mutlu ediyor. Bu yılki projemizle de danışman öğretmenimiz Sibel KILLI’nın rehberliğinde çok güzel bir proje ortaya çıkaracağımıza ve başarılı olacağımıza inanıyorum.</p>
+        </div>
+
+        <div class="kisi-karti karti-sibel">
+            <a href="sibel.jpg" target="_blank"><img class="img" src="sibel.jpg"></a>
+            <b class="isim">Sibel KILLI</b>
+            <p class="metin">Çiğli Aydoğan Yağcı BİLSEM’de BÖT Öğretmeniyim. 2002’de Ege Üniversitesinin BÖTE bölümünü, fakültemin ve bölümümün ilk mezunlarından biri olarak bitirdim. Ekim 2002'de başlayan meslek hayatım boyunca farklı türde okullarda, kademelerde ve farklı yaş gruplarıyla çalışma fırsatı buldum, bilişim teknolojilerine ilgisi olan öğrencilerimle yeni şeyler öğrenmek ve üretmek her zaman en büyük zevkim oldu. Kodlama, Web Tabanlı Programlama, 3D Tasarım, Mobil Uygulama Geliştirme, Robotik Kodlama ve Yapay Zeka Uygulamaları konularında üretmeye ve kendimi geliştirmeye devam ediyorum.</p>
+        </div>
+
+        <div class="kisi-karti karti-harun">
+            <a href="harun.png" target="_blank"><img class="img" src="harun.png"></a>
+            <b class="isim">Harun TAŞKALDIRAN</b>
+            <p class="metin">Merhaba, ben Harun TAŞKALDIRAN. Bilnet Karşıyaka Fen Lisesi’nde 10. sınıf öğrencisiyim. Proje hazırlamayı hep sevmişimdir ve büyük bir zevkle yaparım. Daha önce Tübitak 4006-B sergisi ve Tübitak 2204-A yarışmaları için proje hazırladım. Kendimi kodlama ve 3D tasarım hazırlamada yetenekli görüyorum ve bu yönlerimi geliştirmeyi seviyorum.</p>
+        </div>
+    </div>
+</body>
+</html>
