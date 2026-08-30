@@ -242,3 +242,33 @@ ul li ul{
     border-radius: 50%;
     box-shadow: 5px 5px;
 }
+/* MOBİL UYUMLULUK KODU (MEDIA QUERY) - SADECE DAR EKRANLAR İÇİN */
+@media screen and (max-width: 900px) {
+    /* 1. Tüm çerçeveyi ekran genişliğine sığdır ve taşmaları gizle */
+    body { overflow-x: hidden !important; margin: 0 !important; padding: 0 !important; }
+    .dış { width: 100% !important; margin: 0 !important; padding: 0 !important; }
+    
+    /* 2. Logolar ve Başlık Alanını Serbest Bırakıp Alt Alta Dizme */
+    .dış > div:first-child { display: flex !important; flex-direction: column !important; align-items: center !important; }
+    .logo1, .logo2 { position: relative !important; left: auto !important; right: auto !important; margin: 15px auto !important; display: block !important; width: 135px !important; }
+    .orta { width: 95% !important; margin: 10px auto !important; height: auto !important; padding: 15px 0 !important; display: block !important; }
+    .başlıkbüyük { font-size: 18pt !important; margin-left: 0 !important; text-align: center !important; display: block !important; }
+    
+    /* 3. Orta Sütunlar (Menü ve İçerik) */
+    .flex-sutunlar, #display-part { width: 100% !important; margin: 10px auto !important; display: block !important; background-size: cover !important; }
+    .link-part { width: 100% !important; margin: 10px auto !important; display: block !important; }
+    .link-part ul { margin: 0 auto; width: 90%; max-width: 350px; }
+    
+    /* 4. Sağdaki İnce Uzun Resim Şeritini Yataya Yayma */
+    .yan { width: 100% !important; margin: 20px auto !important; display: flex !important; flex-wrap: wrap !important; justify-content: space-around !important; background: none !important; }
+    .yan a { display: inline-block; margin-bottom: 10px; }
+    
+    /* 5. Alt Logoların Ekrana Sığacak Şekilde Dizilmesi */
+    .siteler { margin-left: 0 !important; margin-top: 20px !important; width: 100% !important; }
+    .siteler table, .siteler tbody, .siteler tr { display: flex !important; flex-wrap: wrap !important; justify-content: center !important; width: 100% !important; }
+    .siteler td { display: block !important; margin: 5px !important; }
+    .takip { margin: 0 5px 15px 5px !important; width: 120px !important; height: auto !important; }
+    
+    /* 6. İçerik Penceresini (İframe) Zorla Sığdırma */
+    iframe { max-width: 100% !important; width: 100% !important; }
+}
