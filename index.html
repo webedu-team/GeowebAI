@@ -3,12 +3,32 @@
         <title>WebEdu Team: GeoWebAI</title>
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <script src="jsler/display.js"></script>
+        <script src="jsler/adaptif.js"></script>
+
+        <!-- FİREBASE BAĞLANTI KODLARI -->
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+<script>
+   
+  const firebaseConfig = {
+  apiKey: "AIzaSyBusyqmZPEOobdKiovyyg5-31ogRM87cFU",
+  authDomain: "geoweb-ai.firebaseapp.com",
+  projectId: "geoweb-ai",
+  storageBucket: "geoweb-ai.firebasestorage.app",
+  messagingSenderId: "6366122353",
+  appId: "1:6366122353:web:4fd8bc5517d7cd7b89a6d0",
+  measurementId: "G-YJQEHPW796"
+};
+    
+    firebase.initializeApp(firebaseConfig);
+    const auth = firebase.auth();
+    const db = firebase.firestore();
+</script>
         <link rel="stylesheet" href="cssler/menum.css">
         <style>
-            /* PRO MOD: FLEXBOX İSKELETİ */
+           
             body, html { margin: 0; padding: 0; box-sizing: border-box; }
-            
-            /* Üç sütunu yan yana tutan kutu */
             .flex-sutunlar {
                 display: flex;
                 justify-content: space-between;
@@ -25,7 +45,7 @@
                 justify-content: center; 
             }
 
-            /* İnce, Zarif Vitrin Butonları */
+            /* Vitrin Butonları */
             .vitrin-buton {
                 cursor: pointer; 
                 border: 2px solid white; 
@@ -45,7 +65,7 @@
                 filter: brightness(1.2);
             }
 
-            /* --- SOL MENÜ ÖZELLEŞTİRMESİ --- */
+            /* --- SOL TARAFTAKİ İÇERİKLER MENÜSÜ --- */
             .link-part ul li a {
                 background: linear-gradient(90deg, #111111 0%, #1e3b29 50%, #36403a 100%) !important; 
                 color: #f1f1f1 !important;
@@ -101,18 +121,18 @@
 
         <div class="logo2" style="position: absolute; right: 20px; top: 15px; z-index: 999; width: 170px; height: 170px; padding-top: 15px; text-align: center; box-sizing: border-box;">
             <b style="color: white; font-size: 15px; font-family: 'Arial Black', Arial, sans-serif; text-shadow: none; letter-spacing: 0.5px;">KULLANICI GİRİŞİ</b>
-            <input type="text" id="kAdi" placeholder="Kullanıcı Adı" style="width: 140px; font-size: 12px; margin-top: 15px; padding: 6px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box;">
-            <input type="password" id="kSifre" placeholder="Şifre" style="width: 140px; font-size: 12px; margin-top: 8px; padding: 6px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box;">
+            <input type="text" id="kAdi" placeholder="Kullanıcı Adı" autocomplete="off" style="width: 140px; font-size: 12px; margin-top: 15px; padding: 6px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box;">
+            <input type="password" id="kSifre" placeholder="Şifre" autocomplete="new-password" style="width: 140px; font-size: 12px; margin-top: 8px; padding: 6px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box;">
             <button onclick="sistemeGiris()" style="width: 140px; font-size: 13px; margin-top: 12px; padding: 8px; cursor: pointer; background-color: #0a3a40; color: white; border: 1px solid white; border-radius: 6px; box-shadow: 2px 2px black; box-sizing: border-box;">GİRİŞ YAP</button>
         </div>
     </div>
 
-    <!-- Mıknatıslanmış Butonlar -->
+    <!-- Mıknatıslanmış Butonlarımız-->
   <div style="display: flex; justify-content: center; width: 100%; position: relative; z-index: 10; margin-top: 15px; margin-bottom: 10px;">
         
         <div style="width: 60%; margin-left: 40px; display: flex; justify-content: space-between; align-items: center;">
             
-            <button class="vitrin-buton" onclick="adaptifModuluBaslat()" style="background: linear-gradient(to right, #11998e, #38ef7d);">
+            <button class="vitrin-buton" onclick="adaptifSimulatoruBaslat()" style="background: linear-gradient(to right, #11998e, #38ef7d);">
                 <span style="font-size: 18px; filter: drop-shadow(1px 1px 1px rgba(0,0,0,0.5));">🧠</span>
                 <b style="color: white; font-family: 'Arial Black', sans-serif; font-size: 11px; text-shadow: 1px 1px 2px black; letter-spacing: 0.5px;">ADAPTİF ÖĞRENME SİMÜLATÖRÜ</b>
             </button>
@@ -121,10 +141,10 @@
                 <span style="font-size: 18px; filter: drop-shadow(1px 1px 1px rgba(0,0,0,0.5));">📐</span>
                 <b style="color: white; font-family: 'Arial Black', sans-serif; font-size: 11px; text-shadow: 1px 1px 2px black; letter-spacing: 0.5px;">DİNAMİK ÇİZİM LABORATUVARI</b>
             </button>
-
         </div>
     </div>
-    <!-- 2. ORTA BÖLÜM -->
+  
+    <!-- 2. ORTA BÖLÜM (Görüntüleme Alanımız) -->
     <div class="flex-sutunlar">
         <div class="link-part" style="margin-top: -16px;">
             <ul>
@@ -166,7 +186,7 @@
     </div> 
 
     <!-- 3. ALT BÖLÜM (Hizalanmış Logolar) -->
-    <div class="siteler" style="display: flex; justify-content: flex-start; margin-left: 100px; margin-top: 10px;">
+    <div class="siteler" style="display: flex; justify-content: center; width: 100%; margin-top: 15px;">
         <table>
             <tr>
                 <td><a href="https://tr.khanacademy.org" target="_blank"><img class="takip" src="fotos/khan2.png"></a></td>
@@ -180,7 +200,7 @@
     </div>
   </div>
 
-  <!-- ASİSTAN MODALI -->
+  <!-- Asistan Butonu -->
   <div id="asistanModal" style="display:none; position:fixed; z-index:1000; left:0; top:0; width:100%; height:100%; background:rgba(0,0,0,0.8);">
     <div style="background:#0a3a40; color:white; margin:10% auto; padding:20px; width:350px; border-radius:15px; border: 3px solid #00ffff; text-align:center;">
         <span onclick="kapatGeoAsistan()" style="float:right; cursor:pointer; font-size:24px; color:white;">&times;</span>
@@ -191,7 +211,7 @@
     </div>
   </div>
 <style>
-    /* Şık ve Etkileşimli Şık Butonları - Daraltıldı */
+    
     .adaptif-buton {
         width: 100%;
         max-width: 360px;
@@ -201,7 +221,7 @@
         border-radius: 8px;
         border: 2px solid transparent;
         cursor: pointer;
-        font-size: 13px; /* Yazı boyutu küçültüldü */
+        font-size: 13px;
         font-weight: bold;
         background-color: #f8f9fa;
         color: #0a3a40;
@@ -215,9 +235,8 @@
         transform: translateX(5px);
     }
     
-    /* YENİ: Renkli ve Dikkat Çekici Dönüt Platformu */
     .sistem-mesaji {
-        background: linear-gradient(135deg, #f7b733 0%, #fc4a1a 100%); /* Ana sayfa butonlarındaki o sıcak renkler */
+        background: linear-gradient(135deg, #f7b733 0%, #fc4a1a 100%);
         color: white;
         padding: 12px 15px;
         border-radius: 8px;
@@ -230,14 +249,12 @@
         border-left: 5px solid #fff;
     }
 
-    /* YENİ: Sınırları Koruyan Kutu (Taşmayı Önler) */
     #soruKutusu {
-        max-height: 280px; /* Orta panelden taşmaması için kesin sınır */
-        overflow-y: auto; /* İçerik uzarsa sadece bu kutu içinde kayar */
+        max-height: 280px;
+        overflow-y: auto;
         padding-right: 10px;
     }
     
-    /* İnce, şık bir kaydırma çubuğu tasarımı */
     #soruKutusu::-webkit-scrollbar {
         width: 6px;
     }
@@ -249,120 +266,5 @@
         background: rgba(255,255,255,0.1);
     }
 </style>
-
-<script>
-    // 1. GELİŞMİŞ SORU HAVUZU (VİDEO YERİNE DERS İÇERİKLERİ YÖNLENDİRMELİ)
-    const soruHavuzu = {
-        "soru1_orta": {
-            metin: "Seviye: 1/3 (Orta)\n\nBir dik üçgenin dik kenar uzunlukları 6 cm ve 8 cm'dir. Bu üçgenin alanı kaç cm²'dir?",
-            secenekler: { A: "14", B: "24", C: "48", D: "60" },
-            dogruCevap: "B",
-            dogruBilirsek: "soru2_zor", 
-            yanlisBilirsek: "soru1_telafi" 
-        },
-        "soru1_telafi": {
-            metin: "<div class='sistem-mesaji'>🔍 SİSTEM ANALİZİ: İki kenarı çarpıp 48 buldun ya da toplayıp 14 buldun. Ancak dik üçgenin alanı (Dik Kenar 1 x Dik Kenar 2) / 2 formülüyle bulunur. (6 x 8) / 2 = 24 olmalıydı.</div>Şimdi bu bilgiyle şu soruyu çözelim:\n\nDik kenarları 4 cm ve 10 cm olan bir dik üçgenin alanı kaç cm²'dir?",
-            secenekler: { A: "14", B: "20", C: "40", D: "80" },
-            dogruCevap: "B",
-            dogruBilirsek: "soru2_orta", 
-            yanlisBilirsek: "bitis_temel_eksik"
-        },
-        "soru2_orta": {
-            metin: "<div class='sistem-mesaji'>✅ HARİKA: Temel formülü kavradın! Sistemi normale döndürüyoruz.</div>Seviye: 2/3 (Orta)\n\nAlanı 30 cm² olan bir üçgenin yüksekliği 6 cm ise, bu yüksekliğin indiği taban uzunluğu kaç cm'dir?",
-            secenekler: { A: "5", B: "10", C: "15", D: "20" },
-            dogruCevap: "B",
-            dogruBilirsek: "soru3_uzman",
-            yanlisBilirsek: "bitis_pratik_eksik"
-        },
-        "soru2_zor": {
-            metin: "<div class='sistem-mesaji'>🚀 TEBRİKLER: İlk soruyu tek seferde bildin. Seviye artırılıyor.</div>Seviye: 2/3 (Zor)\n\nAlanı 24 cm² olan bir üçgenin tabanı, yüksekliğinin 3 katı uzunluğundadır. Buna göre bu üçgenin yüksekliği kaç cm'dir?",
-            secenekler: { A: "4", B: "8", C: "12", D: "16" },
-            dogruCevap: "A", 
-            dogruBilirsek: "soru3_uzman",
-            yanlisBilirsek: "soru2_zor_telafi"
-        },
-        "soru2_zor_telafi": {
-            metin: "<div class='sistem-mesaji'>🔍 SİSTEM ANALİZİ: Denklem kurarken zorlanmış olabilirsin. (3h x h) / 2 = 24 eşitliğinden 3h² = 48, buradan h² = 16 ve h=4 bulunur.</div>Daha doğrudan bir soruyla devam edelim:\n\nAlanı 40 cm² olan bir üçgenin yüksekliği 8 cm'dir. Taban uzunluğu kaçtır?",
-            secenekler: { A: "5", B: "10", C: "15", D: "20" },
-            dogruCevap: "B",
-            dogruBilirsek: "soru3_uzman",
-            yanlisBilirsek: "bitis_pratik_eksik"
-        },
-        "soru3_uzman": {
-            metin: "Seviye: 3/3 (Teknofest Uzman)\n\nMuhteşem ilerliyorsun! İşte son zorluk:\n\nBir dik üçgenin hipotenüsü 13 cm, dik kenarlarından biri ise 5 cm'dir. Bu dik üçgenin alanı kaç cm²'dir?\n*(İpucu: Önce diğer dik kenarı bulmalısın)*",
-            secenekler: { A: "30", B: "60", C: "65", D: "120" },
-            dogruCevap: "A", 
-            dogruBilirsek: "bitis_basarili",
-            yanlisBilirsek: "bitis_kismi_basari"
-        },
-        "bitis_basarili": {
-            metin: "<div class='sistem-mesaji' style='background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);'>🏆 MÜKEMMEL SONUÇ! GeoWeb AI Analizi:\n- Formül Bilgisi: %100\n- Denklem Kurma: %100\n- Analitik Düşünme: %100</div>Geometrik Cisimler ve Şekiller modülünü üstün başarıyla tamamladın. Çalışma Soruları bölümünden yeni testlere geçebilirsin.",
-            secenekler: {}, dogruCevap: ""
-        },
-        "bitis_kismi_basari": {
-            metin: "<div class='sistem-mesaji'>✅ İYİ İŞ ÇIKARDIN!</div>Temel ve orta düzey soruları başarıyla geçtin ancak çoklu kazanım gerektiren sorularda küçük eksiklerin var.\n\nSana tavsiyemiz: Sol menüdeki 'Ders İçerikleri' sekmesine giderek ilgili konuları tekrar incelemen.",
-            secenekler: {}, dogruCevap: ""
-        },
-        "bitis_pratik_eksik": {
-            metin: "<div class='sistem-mesaji'>⚠️ DİKKAT EKSİKLİĞİ!</div>Formülleri biliyorsun ancak ters işlem yaparken (alandan taban/yükseklik bulma) hatalar yapıyorsun.\n\nSana tavsiyemiz: Sol menüdeki 'Ders İçerikleri' bölümünden ilgili sınıfının notlarına göz atman ve işlem pratiği yapman.",
-            secenekler: {}, dogruCevap: ""
-        },
-        "bitis_temel_eksik": {
-            metin: "<div class='sistem-mesaji'>🛑 KAVRAMSAL EKSİKLİK TESPİT EDİLDİ!</div>Üçgenin alanı hesabındaki temel formüllerde kavram yanılgıları yaşadığın tespit edilmiştir.\n\nSimülatör ilerlemeni durdurdu. Lütfen sol menüdeki 'Ders İçerikleri' bölümüne geçiş yaparak alan hesaplamalarını dikkatlice incele ve bu modüle tekrar dön.",
-            secenekler: {}, dogruCevap: ""
-        }
-    };
-
-    let aktifSoru = "";
-
-    // 2. MODÜLÜ ORTA PANELE YÜKLEYEN ANA FONKSİYON
-    function adaptifModuluBaslat() {
-        // YENİ: Arkaplan ana sayfadaki gibi #0a3a40 ve #11998e geçişli yapıldı
-        const arayuz = `
-            <div style="background: linear-gradient(145deg, #0a3a40, #11998e); padding: 20px 25px; border-radius: 12px; color: white; width: 100%; box-sizing: border-box; box-shadow: 0px 5px 15px rgba(0,0,0,0.5);">
-                <h2 style="text-align: center; color: #38ef7d; text-shadow: 1px 1px 2px black; margin-top: 0; margin-bottom: 5px; font-size: 18px; letter-spacing: 1px; font-family: 'Arial Black', sans-serif;">BİREYSEL YÖNLENDİRME MODÜLÜ</h2>
-                <div style="text-align: center; font-size: 11px; color: #a8e6cf; margin-bottom: 15px;">GeoWeb AI Adaptif Analiz Motoru Devrede...</div>
-                <hr style="border: 0; height: 1px; background: linear-gradient(to right, transparent, #38ef7d, transparent); margin-bottom: 15px;">
-                <div id="soruKutusu">
-                    <p id="soruMetni" style="font-size: 14px; font-weight: normal; line-height: 1.4; white-space: pre-wrap; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; margin-top: 0;">Sistem yükleniyor...</p>
-                    <div id="seceneklerAlani" style="margin-top: 15px; display: flex; flex-direction: column; align-items: center;"></div>
-                </div>
-            </div>
-        `;
-        document.getElementById('display-part').innerHTML = arayuz;
-        soruGoster("soru1_orta");
-    }
-
-    // 3. EKRANA YENİ SORU BASAN VE BUTONLARI OLUŞTURAN FONKSİYON
-    function soruGoster(soruId) {
-        const metinAlani = document.getElementById("soruMetni");
-        const seceneklerAlani = document.getElementById("seceneklerAlani");
-
-        aktifSoru = soruId;
-        const soru = soruHavuzu[soruId];
-        
-        metinAlani.innerHTML = soru.metin;
-        
-        let html = "";
-        for (const [harf, deger] of Object.entries(soru.secenekler)) {
-            html += `<button class="adaptif-buton" onclick="cevapKontrol('${harf}')"><span style="color: #fc4a1a; font-size: 15px; margin-right: 8px;">${harf})</span> ${deger}</button>`;
-        }
-        seceneklerAlani.innerHTML = html;
-        
-        // Yeni soru geldiğinde scroll bar'ı en başa sar
-        document.getElementById("soruKutusu").scrollTop = 0;
-    }
-
-    // 4. YAPAY ZEKA KARAR MEKANİZMASI (Tıklanınca Çalışır)
-    function cevapKontrol(secilen) {
-        const soru = soruHavuzu[aktifSoru];
-        
-        if (secilen === soru.dogruCevap) {
-            soruGoster(soru.dogruBilirsek); 
-        } else {
-            soruGoster(soru.yanlisBilirsek); 
-        }
-    }
-</script>
 </body>
 </html>
