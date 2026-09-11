@@ -1,106 +1,112 @@
+<!DOCTYPE html>
 <html>
     <head>
+        <meta charset="UTF-8">
         <title>Konular</title>
         <style>
             .başlık
             {
-        color: white;
-        text-shadow: 1px 1px 2px black, 0 0 25px grey, 0 0 5px black;
-        font-family:Curlz MT;
-        font-weight: bold;
-        font-size: 18pt;
-        margin-left:450px;
+                color: white;
+                text-shadow: 1px 1px 2px black, 0 0 25px grey, 0 0 5px black;
+                font-family: Curlz MT;
+                font-weight: bold;
+                font-size: 18pt;
+                margin-left: 450px;
             }
-            .kutu1
-            {
-                margin-left:20px;
-                margin-top:50px;
-                display:inline-block;
-                font-family: Arial, Helvetica, sans-serif;
-                font-size:10pt;
+            
+            /* Yeşil yanıp sönme efekti */
+            @keyframes yanipSoner {
+                0% { color: #00ff00; opacity: 1.0; text-shadow: 0 0 6px #00ff00; }
+                50% { color: #008000; opacity: 0.4; text-shadow: none; }
+                100% { color: #00ff00; opacity: 1.0; text-shadow: 0 0 6px #00ff00; }
             }
-            .kutu2
-            {
-                margin-top:50px;
-                margin-left:75px;
-                display:inline-block;
-                font-family: Arial, Helvetica, sans-serif;
-                font-size:10pt;
+
+            .maarif-uyari {
+                display: block;
+                font-size: 9pt;
+                font-weight: bold;
+                margin-bottom: 6px;
+                animation: yanipSoner 1.5s infinite;
             }
-            .kutu3
-            {
-                margin-top:50px;
-                margin-left:65px;
-                display:inline-block;
-                font-family: Arial, Helvetica, sans-serif;
-                font-size:10pt;
+
+            /* Ana kapsayıcı kutu */
+            .konu-konteyner {
+                width: 950px;
+                margin-left: 15px;
+                margin-top: 40px;
+                white-space: nowrap; /* Sütunların alt alta kaymasını kesin önler */
             }
-            .kutu4
-            {
-                margin-top:50px;
-                margin-left:35px;
-                display:inline-block;
+
+            /* Her bir sütun kutusu */
+            .kutu {
+                display: inline-block;
+                vertical-align: top;
+                width: 210px;
                 font-family: Arial, Helvetica, sans-serif;
-                font-size:10pt;
+                font-size: 10pt;
+                white-space: normal; 
+                margin-right: 18px;  
+                margin-left:30px;
             }
         </style>
     </head>
     <body background="konular.png">
         <p class="başlık">MATEMATİK</p>
-        <div class="kutu1">
-            MAARİF MODELİNE UYGUNDUR<br><br>
-            Sayılar ve Nicelikler (1)<br>
-            Sayılar ve Nicelikler (2)<br>
-            İşlemlerle Cebirsel Düşünme<br>
-            Geometrik Şekiller<br>
-            Geometrik Nicelikler<br>
-            İstatistiksel Araştırma Süreci<br>
-            Veriden Olasılığa<br>
-        </div>
-        <div class="kutu2">
-            Doğal Sayılarla İşlemler<br>
-            Çarpanlar ve Katlar<br>
-            Kümeler<br>
-            Tam sayılar<br>
-            Kesirlerle İşlemler<br>
-            Ondalık gösterim<br>
-            Oran<br>
-            Cebirsel İfadeler<br>
-            Veri Toplama ve Değerlendirme<br>
-            Açılar<br>
-            Alan ölçme<br>
-            Çember<br>
-            Geometrik Cisimler <br> 
-            Hacim Ölçme<br>
-            Sıvı Ölçme
-        </div>
-        <div class="kutu3">
-            Tam Sayılar<br>
-            Rasyonel Sayılar <br>
-            Kesirlerde İşlemler <br>
-            Cebirsel İfadeler <br>
-            Eşitlik ve Denklem <br>
-            Oran ve Orantı <br>
-            Yüzdeler <br>
-            Doğrular ve Açılar <br>
-            Çokgenler <br>
-            Çember ve Daire <br>
-            Veri Analizi <br>
-            Cisimlerin Farklı Yönlerden Görünümü 
-        </div>
-        <div class="kutu4">
-            Çarpanlar ve Katlar<br>
-            Üslü İfadeler<br>
-            Kareköklü İfadeler<br>
-            Veri Analizi<br>
-            Basit Olayların Olma Olasılığı<br>
-            Cebirsel İfadeler ve Özdeşlikler<br>
-            Doğrusal Denklemler<br>
-            Eşitsizlikler<br>
-            Üçgenler<br>
-            Eşlik ve Benzerlik<br>
-            Geometrik Cisimler<br>
-            Dönüşüm Geometrisi
+        
+        <div class="konu-konteyner">
+            <!-- 1. KUTU (5. Sınıf) -->
+            <div class="kutu">
+             <br><br>
+                Sayılar ve Nicelikler (1)<br>
+                Sayılar ve Nicelikler (2)<br>
+                İşlemlerle Cebirsel Düşünme<br>
+                <b>Geometrik Şekiller</b><br>
+                <b>Geometrik Nicelikler</b><br>
+                İstatistiksel Araştırma Süreci<br>
+                Veriden Olasılığa<br><br><br>
+                   <span class="maarif-uyari">MAARİF MODELİNE UYGUNDUR</span>
+            </div>
+
+            <!-- 2. KUTU (6. Sınıf) -->
+            <div class="kutu">
+           <br><br>
+                Sayılar ve nicelikler<br>
+                İşlemlerle cebirsel düşünme ve değişimler<br>
+                <b>Geometrik şekiller</b><br>
+                <b>Geometrik nicelikler</b><br>
+                İstatistiksel araştırma süreci<br><br><br>
+                     <span class="maarif-uyari">MAARİF MODELİNE UYGUNDUR</span>
+            </div>
+
+            <!-- 3. KUTU (7. Sınıf) -->
+            <div class="kutu">
+           <br><br>
+                Sayılar ve nicelikler<br>
+                İşlemlerle cebirsel düşünme ve değişimler<br>
+                Dönüşüm<br>
+                <b>Geometrik nicelikler</b><br>
+                <b>Geometrik şekiller</b><br>
+                İstatistiksel araştırma süreci<br>
+                Veriden olasılığa<br><br><br>
+                      <span class="maarif-uyari">MAARİF MODELİNE UYGUNDUR</span>
+            </div>
+
+            <!-- 4. KUTU (8. Sınıf) -->
+            <div class="kutu">
+             <br><br>
+                Çarpanlar ve Katlar<br>
+                Üslü İfadeler<br>
+                Kareköklü İfadeler<br>
+                Veri Analizi<br>
+                Basit Olayların Olma Olasılığı<br>
+                Cebirsel İfadeler ve Özdeşlikler<br>
+                Doğrusal Denklemler<br>
+                Eşitsizlikler<br>
+                <b>Üçgenler<br>
+                Eşlik ve Benzerlik<br>
+                Geometrik Cisimler<br>
+                Dönüşüm Geometrisi</b>
+            </div>
         </div>
     </body>
 </html>
