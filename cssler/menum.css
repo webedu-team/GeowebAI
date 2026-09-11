@@ -137,7 +137,7 @@ background-color: rgb(22, 22, 22);
 {
 margin-top:40px;
 display: inline-block;
-width:15%;
+width:%15;
 
 }
 #display-part
@@ -153,7 +153,7 @@ display: inline-block;
 }
 .siteler
 {
-    margin-left:200px;
+   
 }
 body
 {
@@ -244,7 +244,7 @@ ul li ul{
 }
 /* MOBİL UYUMLULUK KODU (MEDIA QUERY) - SADECE DAR EKRANLAR İÇİN */
 @media screen and (max-width: 900px) {
-    /* 1. Tüm çerçeveyi ekran genişliğine sığdır ve taşmaları gizle */
+    /* 1. Tüm çerçeveyi ekran genişliğine sığdırma */
     body { overflow-x: hidden !important; margin: 0 !important; padding: 0 !important; }
     .dış { width: 100% !important; margin: 0 !important; padding: 0 !important; }
     
@@ -259,7 +259,7 @@ ul li ul{
     .link-part { width: 100% !important; margin: 10px auto !important; display: block !important; }
     .link-part ul { margin: 0 auto; width: 90%; max-width: 350px; }
     
-    /* 4. Sağdaki İnce Uzun Resim Şeritini Yataya Yayma */
+    /* 4. Sağdaki İnce Uzun Resim Şeriti */
     .yan { width: 100% !important; margin: 20px auto !important; display: flex !important; flex-wrap: wrap !important; justify-content: space-around !important; background: none !important; }
     .yan a { display: inline-block; margin-bottom: 10px; }
     
@@ -269,6 +269,6 @@ ul li ul{
     .siteler td { display: block !important; margin: 5px !important; }
     .takip { margin: 0 5px 15px 5px !important; width: 120px !important; height: auto !important; }
     
-    /* 6. İçerik Penceresini (İframe) Zorla Sığdırma */
+    /* 6. İçerik Penceresini (İframe)  */
     iframe { max-width: 100% !important; width: 100% !important; }
 }
