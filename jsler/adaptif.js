@@ -1,14 +1,32 @@
 // --- GEOWEBAI: ADAPTİF ÖĞRENME MOTORU ---
 
+// MAARİF MODELİ GÜNCEL KONU LİSTESİ
 const sinifKonulari = {
     5: [
-        { id: "s5_sekil", ad: "1. Geometrik Şekiller ve Açılar" },
-        { id: "s5_nicelik", ad: "2. Geometrik Nicelikler (Alan ve Çevre)" }
+        { id: "s5_sekil", ad: "1. Geometrik Şekiller" },
+        { id: "s5_nicelik", ad: "2. Geometrik Nicelikler" }
+    ],
+    6: [
+        { id: "s6_sekil", ad: "1. Geometrik Şekiller" },
+        { id: "s6_nicelik", ad: "2. Geometrik Nicelikler" }
+    ],
+    7: [
+        { id: "s7_nicelik", ad: "1. Geometrik Nicelikler" },
+        { id: "s7_sekil", ad: "2. Geometrik Şekiller" }
+    ],
+    8: [
+        { id: "s8_ucgenler", ad: "1. Üçgenler" },
+        { id: "s8_eslik", ad: "2. Eşlik ve Benzerlik" },
+        { id: "s8_cisimler", ad: "3. Geometrik Cisimler" },
+        { id: "s8_donusum", ad: "4. Dönüşüm Geometrisi" }
     ]
 };
 
 const sinifRenkleri = {
-    5: { border: "#2df888", text: "#a8ffb2" }
+    5: { border: "#2df888", text: "#a8ffb2" },
+    6: { border: "#ffe17d", text: "#ffeb99" },
+    7: { border: "#7d96ff", text: "#a3b7ff" },
+    8: { border: "#ff8b7d", text: "#ffb3ab" }
 };
 
 let ogrenciSkoru = 0;
@@ -16,201 +34,205 @@ let toplamCozulen = 0;
 let aktifSoruKey = "";
 let aktifTip = "";
 
-// 5. Sınıf 1. Ünite Havuzu (Geometrik Şekiller ve Açılar)
+// --- DİNAMİK SIRALAMA DEĞİŞKENLERİ ---
+let rastgeleSoruSirasi = [];
+let guncelSoruIndeksi = 0;
+
+// 5. Sınıf 1. Ünite Havuzu (Geometrik Şekiller)
 const soruHavuzu_s5_sekil = {
     "s5_q1": {
         metin: "Soru 1/10 (Temel Seviye)\n\nKöşeleri ve kenarları olan, karşılıklı kenar uzunlukları birbirine eşit ve tüm iç açıları 90'ar derece olan dörtgen aşağıdakilerden hangisidir?",
         secenekler: { A: "Kare", B: "Dikdörtgen", C: "Yamuk", D: "Eşkenar Dörtgen" },
-        dogruCevap: "B", dogruBilirsek: "s5_q2", yanlisBilirsek: "s5_q1_telafi"
+        dogruCevap: "B"
     },
     "s5_q1_telafi": {
         metin: "<div style='background: linear-gradient(135deg, #f7b733 0%, #fc4a1a 100%); color: white; padding: 8px; border-radius: 6px; margin-bottom: 6px; font-size: 13px;'>🔍 ANALİZ: Karenin tüm kenarları eşittir. Karşılıklı kenarları eşit ve açıları 90° olan dikdörtgendir.<br>💡 <b>AI Önerisi:</b> Sitemizdeki <b>Örnek Sorular</b> bölümünden çözüp pratik yapabilirsin.</div>Soru 1 - Telafi\n\nTüm kenar uzunlukları eşit ve bütün iç açıları 90° olan dörtgen hangisidir?",
         secenekler: { A: "Kare", B: "Dikdörtgen", C: "Yamuk", D: "Paralelkenar" },
-        dogruCevap: "A", dogruBilirsek: "s5_q2", yanlisBilirsek: "s5_q2"
+        dogruCevap: "A"
     },
     "s5_q2": {
         metin: "Soru 2/10 (Temel Seviye)\n\nBir üçgenin iç açılarının ölçüleri toplamı kaç derecedir?",
         secenekler: { A: "90°", B: "180°", C: "270°", D: "360°" },
-        dogruCevap: "B", dogruBilirsek: "s5_q3", yanlisBilirsek: "s5_q2_telafi"
+        dogruCevap: "B"
     },
     "s5_q2_telafi": {
         metin: "<div style='background: linear-gradient(135deg, #f7b733 0%, #fc4a1a 100%); color: white; padding: 8px; border-radius: 6px; margin-bottom: 6px; font-size: 13px;'>🔍 ANALİZ: Tüm üçgenlerin iç açılarının toplamı sabittir ve 180 derecedir.<br>💡 <b>AI Önerisi:</b> Sitemizdeki ders anlatım <b>Sunularını</b> inceleyebilirsin.</div>Soru 2 - Telafi\n\nÇeşitkenar bir üçgenin iç açılarının toplamı kaç derecedir?",
         secenekler: { A: "90°", B: "180°", C: "360°", D: "540°" },
-        dogruCevap: "B", dogruBilirsek: "s5_q3", yanlisBilirsek: "s5_q3"
+        dogruCevap: "B"
     },
     "s5_q3": {
         metin: "Soru 3/10 (Orta Seviye)\n\nÖlçüsü 90 dereceden büyük, 180 dereceden küçük olan açılara ne ad verilir?",
         secenekler: { A: "Dar Açı", B: "Dik Açı", C: "Geniş Açı", D: "Doğru Açı" },
-        dogruCevap: "C", dogruBilirsek: "s5_q4", yanlisBilirsek: "s5_q3_telafi"
+        dogruCevap: "C"
     },
     "s5_q3_telafi": {
         metin: "<div style='background: linear-gradient(135deg, #f7b733 0%, #fc4a1a 100%); color: white; padding: 8px; border-radius: 6px; margin-bottom: 6px; font-size: 13px;'>🔍 ANALİZ: 90° ile 180° arasındaki açılara geniş açı denir.<br>💡 <b>AI Önerisi:</b> Bu konuda yapay zeka <b>GeoAsistan</b>'ımıza danışmak ister misin?</div>Soru 3 - Telafi\n\nÖlçüsü tam olarak 90 derece olan açı hangisidir?",
         secenekler: { A: "Dar Açı", B: "Dik Açı", C: "Geniş Açı", D: "Doğru Açı" },
-        dogruCevap: "B", dogruBilirsek: "s5_q4", yanlisBilirsek: "s5_q4"
+        dogruCevap: "B"
     },
     "s5_q4": {
         metin: "Soru 4/10 (Orta Seviye)\n\nBir açısının ölçüsü 90 derece olan üçgene ne ad verilir?",
         secenekler: { A: "Dar Açılı Üçgen", B: "Geniş Açılı Üçgen", C: "Dik Açılı Üçgen", D: "Eşkenar Üçgen" },
-        dogruCevap: "C", dogruBilirsek: "s5_q5", yanlisBilirsek: "s5_q4_telafi"
+        dogruCevap: "C"
     },
     "s5_q4_telafi": {
         metin: "<div style='background: linear-gradient(135deg, #f7b733 0%, #fc4a1a 100%); color: white; padding: 8px; border-radius: 6px; margin-bottom: 6px; font-size: 13px;'>🔍 ANALİZ: Bir açısı 90° olan üçgen dik açılı üçgendir.<br>💡 <b>AI Önerisi:</b> Sitemizdeki geometri <b>Oyunlarını</b> oynayarak pratik yapabilirsin.</div>Soru 4 - Telafi\n\nBütün iç açıları 90°'den küçük olan üçgenlere ne denir?",
         secenekler: { A: "Dar Açılı Üçgen", B: "Dik Açılı Üçgen", C: "Geniş Açılı Üçgen", D: "Çeşitkenar Üçgen" },
-        dogruCevap: "A", dogruBilirsek: "s5_q5", yanlisBilirsek: "s5_q5"
+        dogruCevap: "A"
     },
     "s5_q5": {
         metin: "Soru 5/10 (Uygulama Seviyesi)\n\nBir ikizkenar üçgenin tepe açısı 50° ise, taban açılarından biri kaç derecedir?",
         secenekler: { A: "50°", B: "65°", C: "70°", D: "130°" },
-        dogruCevap: "B", dogruBilirsek: "s5_q6", yanlisBilirsek: "s5_q5_telafi"
+        dogruCevap: "B"
     },
     "s5_q5_telafi": {
         metin: "<div style='background: linear-gradient(135deg, #f7b733 0%, #fc4a1a 100%); color: white; padding: 8px; border-radius: 6px; margin-bottom: 6px; font-size: 13px;'>🔍 ANALİZ: (180 - 50) / 2 = 65° hesaplanır.<br>💡 <b>AI Önerisi:</b> Biraz ara verip sitedeki <b>Eğlence</b> linkine göz atmaya ne dersin?</div>Soru 5 - Telafi\n\nİç açılarından ikisinin ölçüsü eşit olan üçgenlere ne denir?",
         secenekler: { A: "Eşkenar Üçgen", B: "İkizkenar Üçgen", C: "Çeşitkenar Üçgen", D: "Geniş Açılı Üçgen" },
-        dogruCevap: "B", dogruBilirsek: "s5_q6", yanlisBilirsek: "s5_q6"
+        dogruCevap: "B"
     },
     "s5_q6": {
         metin: "Soru 6/10 (Uygulama Seviyesi)\n\nAşağıdaki dörtgenlerden hangisinin karşılıklı kenar çiftlerinden sadece biri paraleldir?",
         secenekler: { A: "Kare", B: "Dikdörtgen", C: "Yamuk", D: "Paralelkenar" },
-        dogruCevap: "C", dogruBilirsek: "s5_q7", yanlisBilirsek: "s5_q6_telafi"
+        dogruCevap: "C"
     },
     "s5_q6_telafi": {
         metin: "<div style='background: linear-gradient(135deg, #f7b733 0%, #fc4a1a 100%); color: white; padding: 8px; border-radius: 6px; margin-bottom: 6px; font-size: 13px;'>🔍 ANALİZ: Yalnızca bir çifti paralel olan dörtgen yamuktur.<br>💡 <b>AI Önerisi:</b> Sitemizdeki <b>Örnek Sorular</b> bölümünden çözüp pratik yapabilirsin.</div>Soru 6 - Telafi\n\nKarşılıklı kenar çiftlerinin ikisi de paralel olan dörtgen hangisidir?",
         secenekler: { A: "Yamuk", B: "Paralelkenar", C: "Üçgen", D: "Beşgen" },
-        dogruCevap: "B", dogruBilirsek: "s5_q7", yanlisBilirsek: "s5_q7"
+        dogruCevap: "B"
     },
     "s5_q7": {
         metin: "Soru 7/10 (Analiz Seviyesi)\n\nBir beşgenin kaç tane köşesi vardır?",
         secenekler: { A: "3", B: "4", C: "5", D: "6" },
-        dogruCevap: "C", dogruBilirsek: "s5_q8", yanlisBilirsek: "s5_q7_telafi"
+        dogruCevap: "C"
     },
     "s5_q7_telafi": {
         metin: "<div style='background: linear-gradient(135deg, #f7b733 0%, #fc4a1a 100%); color: white; padding: 8px; border-radius: 6px; margin-bottom: 6px; font-size: 13px;'>🔍 ANALİZ: Beşgenin 5 kenarı ve 5 köşesi vardır.<br>💡 <b>AI Önerisi:</b> Sitemizdeki ders anlatım <b>Sunularını</b> inceleyebilirsin.</div>Soru 7 - Telafi\n\nÜçgenin kaç kenarı vardır?",
         secenekler: { A: "3", B: "4", C: "5", D: "6" },
-        dogruCevap: "A", dogruBilirsek: "s5_q8", yanlisBilirsek: "s5_q8"
+        dogruCevap: "A"
     },
     "s5_q8": {
         metin: "Soru 8/10 (Analiz Seviyesi)\n\nTüm kenar uzunlukları eşit olan bir eşkenar üçgenin bir iç açısı kaç derecedir?",
         secenekler: { A: "45°", B: "60°", C: "90°", D: "120°" },
-        dogruCevap: "B", dogruBilirsek: "s5_q9", yanlisBilirsek: "s5_q8_telafi"
+        dogruCevap: "B"
     },
     "s5_q8_telafi": {
         metin: "<div style='background: linear-gradient(135deg, #f7b733 0%, #fc4a1a 100%); color: white; padding: 8px; border-radius: 6px; margin-bottom: 6px; font-size: 13px;'>🔍 ANALİZ: 180 / 3 = 60° bulunur.<br>💡 <b>AI Önerisi:</b> Bu konuda yapay zeka <b>GeoAsistan</b>'ımıza danışmak ister misin?</div>Soru 8 - Telafi\n\nİç açılarının toplamı 180° olan ve üç kenarı da eşit olan üçgen hangisidir?",
         secenekler: { A: "İkizkenar Üçgen", B: "Çeşitkenar Üçgen", C: "Eşkenar Üçgen", D: "Dik Üçgen" },
-        dogruCevap: "C", dogruBilirsek: "s5_q9", yanlisBilirsek: "s5_q9"
+        dogruCevap: "C"
     },
     "s5_q9": {
         metin: "Soru 9/10 (İleri Seviye)\n\nÖlçüleri toplamı 90 derece olan iki açıya ne ad verilir?",
         secenekler: { A: "Tümler Açılar", B: "Bütünler Açılar", C: "Komşu Açılar", D: "Ters Açılar" },
-        dogruCevap: "A", dogruBilirsek: "s5_q10", yanlisBilirsek: "s5_q9_telafi"
+        dogruCevap: "A"
     },
     "s5_q9_telafi": {
         metin: "<div style='background: linear-gradient(135deg, #f7b733 0%, #fc4a1a 100%); color: white; padding: 8px; border-radius: 6px; margin-bottom: 6px; font-size: 13px;'>🔍 ANALİZ: Toplamları 90° olanlar tümler, 180° olanlar bütünlerdir.<br>💡 <b>AI Önerisi:</b> Sitemizdeki geometri <b>Oyunlarını</b> oynayarak pratik yapabilirsin.</div>Soru 9 - Telafi\n\nÖlçüleri toplamı 180 derece olan iki açıya ne denir?",
         secenekler: { A: "Tümler Açılar", B: "Bütünler Açılar", C: "Dar Açılar", D: "Dik Açılar" },
-        dogruCevap: "B", dogruBilirsek: "s5_q10", yanlisBilirsek: "s5_q10"
+        dogruCevap: "B"
     },
     "s5_q10": {
         metin: "Soru 10/10 (Uzman Seviye)\n\nBir dik üçgende dik açılardan biri 35° ise, diğer dar açının ölçüsü kaç derecedir?",
         secenekler: { A: "45°", B: "55°", C: "65°", D: "90°" },
-        dogruCevap: "B", dogruBilirsek: "s5_bitis_karne", yanlisBilirsek: "s5_bitis_karne"
+        dogruCevap: "B"
     }
 };
 
-// 5. Sınıf 2. Ünite Havuzu (Geometrik Nicelikler - Alan ve Çevre)
+// 5. Sınıf 2. Ünite Havuzu (Geometrik Nicelikler)
 const soruHavuzu_s5_nicelik = {
     "s5n_q1": {
         metin: "Soru 1/10 (Temel Seviye - Çevre)\n\nBir kenar uzunluğu 12 cm olan bir karenin çevre uzunluğu kaç santimetredir?",
         secenekler: { A: "24 cm", B: "36 cm", C: "48 cm", D: "144 cm" },
-        dogruCevap: "C", dogruBilirsek: "s5n_q2", yanlisBilirsek: "s5n_q1_telafi"
+        dogruCevap: "C"
     },
     "s5n_q1_telafi": {
         metin: "<div style='background: linear-gradient(135deg, #f7b733 0%, #fc4a1a 100%); color: white; padding: 8px; border-radius: 6px; margin-bottom: 6px; font-size: 13px;'>🔍 ANALİZ: Karenin 4 eşit kenarı vardır. Çevre bulmak için kenar 4 ile çarpılır (12 x 4 = 48).<br>💡 <b>AI Önerisi:</b> Sitemizdeki <b>Örnek Sorular</b> bölümünden çözüp pratik yapabilirsin.</div>Soru 1 - Telafi\n\nBir kenarı 8 cm olan karenin çevresi kaç cm'dir?",
         secenekler: { A: "16 cm", B: "24 cm", C: "32 cm", D: "64 cm" },
-        dogruCevap: "C", dogruBilirsek: "s5n_q2", yanlisBilirsek: "s5n_q2"
+        dogruCevap: "C"
     },
     "s5n_q2": {
         metin: "Soru 2/10 (Temel Seviye - Alan)\n\nKısa kenarı 5 cm, uzun kenarı 10 cm olan bir dikdörtgenin alanı kaç cm²'dir?",
         secenekler: { A: "30 cm²", B: "50 cm²", C: "100 cm²", D: "15 cm²" },
-        dogruCevap: "B", dogruBilirsek: "s5n_q3", yanlisBilirsek: "s5n_q2_telafi"
+        dogruCevap: "B"
     },
     "s5n_q2_telafi": {
         metin: "<div style='background: linear-gradient(135deg, #f7b733 0%, #fc4a1a 100%); color: white; padding: 8px; border-radius: 6px; margin-bottom: 6px; font-size: 13px;'>🔍 ANALİZ: Dikdörtgenin alanı kısa kenar ile uzun kenarın çarpımıdır (5 x 10 = 50).<br>💡 <b>AI Önerisi:</b> Sitemizdeki ders anlatım <b>Sunularını</b> inceleyebilirsin.</div>Soru 2 - Telafi\n\nKısa kenarı 4 cm, uzun kenarı 7 cm olan dikdörtgenin alanı kaç cm²'dir?",
         secenekler: { A: "22 cm²", B: "28 cm²", C: "56 cm²", D: "11 cm²" },
-        dogruCevap: "B", dogruBilirsek: "s5n_q3", yanlisBilirsek: "s5n_q3"
+        dogruCevap: "B"
     },
     "s5n_q3": {
         metin: "Soru 3/10 (Orta Seviye - Çevre)\n\nUzun kenarı 15 cm, kısa kenarı 8 cm olan bir dikdörtgenin çevre uzunluğu kaç cm'dir?",
         secenekler: { A: "23 cm", B: "46 cm", C: "60 cm", D: "120 cm" },
-        dogruCevap: "B", dogruBilirsek: "s5n_q4", yanlisBilirsek: "s5n_q3_telafi"
+        dogruCevap: "B"
     },
     "s5n_q3_telafi": {
         metin: "<div style='background: linear-gradient(135deg, #f7b733 0%, #fc4a1a 100%); color: white; padding: 8px; border-radius: 6px; margin-bottom: 6px; font-size: 13px;'>🔍 ANALİZ: Çevre için iki kenar toplanıp 2 ile çarpılır: (15 + 8) x 2 = 46 cm.<br>💡 <b>AI Önerisi:</b> Bu konuda yapay zeka <b>GeoAsistan</b>'ımıza danışmak ister misin?</div>Soru 3 - Telafi\n\nKısa kenarı 6 cm, uzun kenarı 10 cm olan dikdörtgenin çevresi kaçtır?",
         secenekler: { A: "32 cm", B: "16 cm", C: "60 cm", D: "30 cm" },
-        dogruCevap: "A", dogruBilirsek: "s5n_q4", yanlisBilirsek: "s5n_q4"
+        dogruCevap: "A"
     },
     "s5n_q4": {
         metin: "Soru 4/10 (Orta Seviye - Alan)\n\nBir kenar uzunluğu 8 cm olan bir karenin alanı kaç cm²'dir?",
         secenekler: { A: "36 cm²", B: "48 cm²", C: "64 cm²", D: "81 cm²" },
-        dogruCevap: "C", dogruBilirsek: "s5n_q5", yanlisBilirsek: "s5n_q4_telafi"
+        dogruCevap: "C"
     },
     "s5n_q4_telafi": {
         metin: "<div style='background: linear-gradient(135deg, #f7b733 0%, #fc4a1a 100%); color: white; padding: 8px; border-radius: 6px; margin-bottom: 6px; font-size: 13px;'>🔍 ANALİZ: Karenin alanı iki kenarının birbiriyle çarpımıdır (8 x 8 = 64).<br>💡 <b>AI Önerisi:</b> Sitemizdeki geometri <b>Oyunlarını</b> oynayarak pratik yapabilirsin.</div>Soru 4 - Telafi\n\nBir kenarı 6 cm olan karenin alanı kaç cm²'dir?",
         secenekler: { A: "24 cm²", B: "36 cm²", C: "12 cm²", D: "48 cm²" },
-        dogruCevap: "B", dogruBilirsek: "s5n_q5", yanlisBilirsek: "s5n_q5"
+        dogruCevap: "B"
     },
     "s5n_q5": {
         metin: "Soru 5/10 (Uygulama - Çevreden Kenar Bulma)\n\nÇevresi 40 cm olan bir karenin bir kenar uzunluğu kaç santimetredir?",
         secenekler: { A: "5 cm", B: "10 cm", C: "20 cm", D: "160 cm" },
-        dogruCevap: "B", dogruBilirsek: "s5n_q6", yanlisBilirsek: "s5n_q5_telafi"
+        dogruCevap: "B"
     },
     "s5n_q5_telafi": {
         metin: "<div style='background: linear-gradient(135deg, #f7b733 0%, #fc4a1a 100%); color: white; padding: 8px; border-radius: 6px; margin-bottom: 6px; font-size: 13px;'>🔍 ANALİZ: Çevreden kenar bulmak için toplam çevre 4'e bölünür (40 / 4 = 10).<br>💡 <b>AI Önerisi:</b> Biraz ara verip sitedeki <b>Eğlence</b> linkine göz atmaya ne dersin?</div>Soru 5 - Telafi\n\nÇevresi 28 cm olan karenin bir kenarı kaçtır?",
         secenekler: { A: "4 cm", B: "7 cm", C: "14 cm", D: "56 cm" },
-        dogruCevap: "B", dogruBilirsek: "s5n_q6", yanlisBilirsek: "s5n_q6"
+        dogruCevap: "B"
     },
     "s5n_q6": {
         metin: "Soru 6/10 (Uygulama - Alandan Kenar Bulma)\n\nAlanı 36 cm² olan bir karenin bir kenar uzunluğu kaç santimetredir?",
         secenekler: { A: "4 cm", B: "6 cm", C: "9 cm", D: "18 cm" },
-        dogruCevap: "B", dogruBilirsek: "s5n_q7", yanlisBilirsek: "s5n_q6_telafi"
+        dogruCevap: "B"
     },
     "s5n_q6_telafi": {
         metin: "<div style='background: linear-gradient(135deg, #f7b733 0%, #fc4a1a 100%); color: white; padding: 8px; border-radius: 6px; margin-bottom: 6px; font-size: 13px;'>🔍 ANALİZ: Hangi sayının kendisiyle çarpımı 36'dır? 6 x 6 = 36 olduğu için kenar 6'dır.<br>💡 <b>AI Önerisi:</b> Sitemizdeki <b>Örnek Sorular</b> bölümünden çözüp pratik yapabilirsin.</div>Soru 6 - Telafi\n\nAlanı 49 cm² olan karenin bir kenarı kaç cm'dir?",
         secenekler: { A: "7 cm", B: "9 cm", C: "12 cm", D: "24 cm" },
-        dogruCevap: "A", dogruBilirsek: "s5n_q7", yanlisBilirsek: "s5n_q7"
+        dogruCevap: "A"
     },
     "s5n_q7": {
         metin: "Soru 7/10 (Analiz - Dikdörtgen Kısa Kenar Bulma)\n\nAlanı 60 cm² ve uzun kenarı 10 cm olan bir dikdörtgenin kısa kenarı kaç santimetredir?",
         secenekler: { A: "4 cm", B: "5 cm", C: "6 cm", D: "50 cm" },
-        dogruCevap: "C", dogruBilirsek: "s5n_q8", yanlisBilirsek: "s5n_q7_telafi"
+        dogruCevap: "C"
     },
     "s5n_q7_telafi": {
         metin: "<div style='background: linear-gradient(135deg, #f7b733 0%, #fc4a1a 100%); color: white; padding: 8px; border-radius: 6px; margin-bottom: 6px; font-size: 13px;'>🔍 ANALİZ: Alan, uzun kenara bölünerek kısa kenar bulunur (60 / 10 = 6).<br>💡 <b>AI Önerisi:</b> Sitemizdeki ders anlatım <b>Sunularını</b> inceleyebilirsin.</div>Soru 7 - Telafi\n\nAlanı 40 cm² ve uzun kenarı 8 cm olan dikdörtgenin kısa kenarı kaçtır?",
         secenekler: { A: "4 cm", B: "5 cm", C: "8 cm", D: "10 cm" },
-        dogruCevap: "B", dogruBilirsek: "s5n_q8", yanlisBilirsek: "s5n_q8"
+        dogruCevap: "B"
     },
     "s5n_q8": {
         metin: "Soru 8/10 (Analiz - Birim Kareler)\n\nBirim kareli kağıt üzerinde kapladığı yer 24 birim kare olan bir dikdörtgenin kenar uzunlukları aşağıdakilerden hangisi olamaz?",
         secenekler: { A: "3 br ve 8 br", B: "4 br ve 6 br", C: "5 br ve 5 br", D: "2 br ve 12 br" },
-        dogruCevap: "C", dogruBilirsek: "s5n_q9", yanlisBilirsek: "s5n_q8_telafi"
+        dogruCevap: "C"
     },
     "s5n_q8_telafi": {
         metin: "<div style='background: linear-gradient(135deg, #f7b733 0%, #fc4a1a 100%); color: white; padding: 8px; border-radius: 6px; margin-bottom: 6px; font-size: 13px;'>🔍 ANALİZ: 5 x 5 = 25 birim kare yapar, yani 24 olamaz.<br>💡 <b>AI Önerisi:</b> Bu konuda yapay zeka <b>GeoAsistan</b>'ımıza danışmak ister misin?</div>Soru 8 - Telafi\n\nHangi iki sayının çarpımı 24 yapmaz?",
         secenekler: { A: "3 ve 8", B: "4 ve 6", C: "5 ve 5", D: "2 ve 12" },
-        dogruCevap: "C", dogruBilirsek: "s5n_q9", yanlisBilirsek: "s5n_q9"
+        dogruCevap: "C"
     },
     "s5n_q9": {
         metin: "Soru 9/10 (İleri Seviye - Çevre Karşılaştırma)\n\nKısa kenarı 4 cm, uzun kenarı 10 cm olan dikdörtgen ile bir kenarı 6 cm olan karenin çevreleri arasındaki fark kaç cm'dir?",
         secenekler: { A: "2 cm", B: "4 cm", C: "6 cm", D: "8 cm" },
-        dogruCevap: "B", dogruBilirsek: "s5n_q10", yanlisBilirsek: "s5n_q9_telafi"
+        dogruCevap: "B"
     },
     "s5n_q9_telafi": {
         metin: "<div style='background: linear-gradient(135deg, #f7b733 0%, #fc4a1a 100%); color: white; padding: 8px; border-radius: 6px; margin-bottom: 6px; font-size: 13px;'>🔍 ANALİZ: Dikdörtgenin çevresi (10+4)x2 = 28 cm, karenin çevresi 6x4 = 24 cm'dir. Fark 28 - 24 = 4 cm'dir.<br>💡 <b>AI Önerisi:</b> Sitemizdeki geometri <b>Oyunlarını</b> oynayarak pratik yapabilirsin.</div>Soru 9 - Telafi\n\nÇevresi 24 cm olan bir karenin bir kenarı ile çevresi 28 cm olan dikdörtgenin uzun kenarını bulup karşılaştırabilirsin.",
         secenekler: { A: "Kare daha büyüktür", B: "Dikdörtgenin çevresi daha büyüktür", C: "Eşittir", D: "Hesaplanamaz" },
-        dogruCevap: "B", dogruBilirsek: "s5n_q10", yanlisBilirsek: "s5n_q10"
+        dogruCevap: "B"
     },
     "s5n_q10": {
         metin: "Soru 10/10 (Uzman Seviye - Bileşik Alan)\n\nAlanları eşit olan iki şekilden birisi kenarları 9 cm ve 4 cm olan bir dikdörtgendir. Diğer şekil bir kare ise, bu karenin bir kenarı kaç cm'dir?",
         secenekler: { A: "4 cm", B: "6 cm", C: "9 cm", D: "36 cm" },
-        dogruCevap: "B", dogruBilirsek: "s5_bitis_karne", yanlisBilirsek: "s5_bitis_karne"
+        dogruCevap: "B"
     }
 };
 
@@ -256,13 +278,8 @@ function adaptifSimulatoruBaslat() {
     `;
 }
 
-// Sınıf Konularını Listeleme
+// Sınıf Konularını Listeleme (Açık ve Kilitli Modüller Mantığı)
 function sinifSec(sinifDuzeyi) {
-    if (sinifDuzeyi !== 5) {
-        alert("Prototip aşamasında şu an sadece 5. Sınıf geometri üniteleri aktiftir.");
-        return;
-    }
-
     let soruKutusu = document.getElementById("soruKutusu");
     if (!soruKutusu) return;
 
@@ -278,30 +295,51 @@ function sinifSec(sinifDuzeyi) {
     `;
 
     konular.forEach(konu => {
-        html += `
-            <button onclick="konuSec('${konu.id}')" style="background: rgba(0, 0, 0, 0.4); color: white; border: 1px solid ${renk.border}; padding: 10px 14px; border-radius: 6px; cursor: pointer; font-size: 13px; font-weight: bold; text-align: left; box-shadow: 0 2px 4px rgba(0,0,0,0.3); transition: 0.2s;">
-                🔹 ${konu.ad}
-            </button>
-        `;
+        if (sinifDuzeyi === 5) {
+            // Sadece 5. Sınıf aktif modülleri
+            html += `
+                <button onclick="konuSec('${konu.id}')" style="background: rgba(0, 0, 0, 0.4); color: white; border: 1px solid ${renk.border}; padding: 10px 14px; border-radius: 6px; cursor: pointer; font-size: 13px; font-weight: bold; text-align: left; box-shadow: 0 2px 4px rgba(0,0,0,0.3); transition: 0.2s;">
+                    🔹 ${konu.ad}
+                </button>
+            `;
+        } else {
+            // 6, 7 ve 8. Sınıf kilitli modülleri
+            html += `
+                <button onclick="alert('Bu modül şu an yapım aşamasındadır. TEKNOFEST prototipinde sadece 5. Sınıf konuları aktiftir.')" style="background: rgba(0, 0, 0, 0.6); color: #aaaaaa; border: 1px dashed #777777; padding: 10px 14px; border-radius: 6px; cursor: not-allowed; font-size: 13px; font-weight: bold; text-align: left; box-shadow: inset 0 2px 4px rgba(0,0,0,0.5);">
+                    🔒 ${konu.ad} <span style="font-size: 10px; color: #ff8b7d; float: right; margin-top: 2px;">(Yakında)</span>
+                </button>
+            `;
+        }
     });
 
     html += `</div>`;
     soruKutusu.innerHTML = html;
 }
 
-// Konu Seçimi ve Başlatma
+// Konu Seçimi ve Başlatma (Karıştırma Algoritması)
 function konuSec(konuId) {
     ogrenciSkoru = 0;
     toplamCozulen = 0;
+    guncelSoruIndeksi = 0;
 
+    let anaSorular = [];
+    
     if (konuId === "s5_sekil") {
-        adaptifTestiBaslat("s5_q1", "sekil");
+        aktifTip = "sekil";
+        anaSorular = ["s5_q1", "s5_q2", "s5_q3", "s5_q4", "s5_q5", "s5_q6", "s5_q7", "s5_q8", "s5_q9", "s5_q10"];
     } else if (konuId === "s5_nicelik") {
-        adaptifTestiBaslat("s5n_q1", "nicelik");
+        aktifTip = "nicelik";
+        anaSorular = ["s5n_q1", "s5n_q2", "s5n_q3", "s5n_q4", "s5n_q5", "s5n_q6", "s5n_q7", "s5n_q8", "s5n_q9", "s5n_q10"];
     }
+
+    // Soruları rastgele karıştırıyoruz
+    rastgeleSoruSirasi = anaSorular.sort(() => Math.random() - 0.5);
+
+    // Karışmış dizinin ilk sorusundan başlatıyoruz
+    adaptifTestiBaslat(rastgeleSoruSirasi[0], aktifTip);
 }
 
-// Adaptif Soruyu Ekrana Basma
+// Adaptif Soruyu Ekrana Basma (Dinamik Soru Numarası)
 function adaptifTestiBaslat(soruKey, tip) {
     aktifSoruKey = soruKey;
     aktifTip = tip;
@@ -316,12 +354,20 @@ function adaptifTestiBaslat(soruKey, tip) {
     let soruKutusu = document.getElementById("soruKutusu");
     if (!soruKutusu) return;
 
+    // Metindeki soru numarasını dinamik yapma
+    let metin = soru.metin;
+    if (!aktifSoruKey.includes("telafi")) {
+        metin = metin.replace(/Soru \d+\/10/, `Soru ${guncelSoruIndeksi + 1}/10`);
+    } else {
+        metin = metin.replace(/Soru \d+ - Telafi/, `Soru ${guncelSoruIndeksi + 1} - Telafi`);
+    }
+
     let seceneklerHtml = "";
     if (soru.secenekler && Object.keys(soru.secenekler).length > 0) {
-        for (let [harf, metin] of Object.entries(soru.secenekler)) {
+        for (let [harf, secenekMetni] of Object.entries(soru.secenekler)) {
             seceneklerHtml += `
                 <button onclick="cevapVer('${harf}')" style="background: rgba(255,255,255,0.9); color: #0a3a40; border: none; padding: 10px 14px; border-radius: 6px; cursor: pointer; font-size: 13px; font-weight: bold; text-align: left; box-shadow: 0 2px 4px rgba(0,0,0,0.2); transition: 0.2s;">
-                    <span style="color: #fc4a1a; font-weight: bold;">${harf})</span> ${metin}
+                    <span style="color: #fc4a1a; font-weight: bold;">${harf})</span> ${secenekMetni}
                 </button>
             `;
         }
@@ -330,7 +376,7 @@ function adaptifTestiBaslat(soruKey, tip) {
     soruKutusu.innerHTML = `
         <div style="padding: 0 10px; display: flex; flex-direction: column; gap: 6px;">
             <div style="font-size: 13px; color: #ffffff; white-space: pre-wrap; line-height: 1.4; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;">
-                ${soru.metin}
+                ${metin}
             </div>
             <div style="display: flex; flex-direction: column; gap: 5px; margin-top: 3px;">
                 ${seceneklerHtml}
@@ -339,7 +385,7 @@ function adaptifTestiBaslat(soruKey, tip) {
     `;
 }
 
-// Cevap Kontrolleri
+// Cevap Kontrolleri (Dinamik Akış Kontrolü)
 function cevapVer(secilenHarf) {
     let aktifHavuz = (aktifTip === "nicelik") ? soruHavuzu_s5_nicelik : soruHavuzu_s5_sekil;
     let soru = aktifHavuz[aktifSoruKey];
@@ -348,14 +394,31 @@ function cevapVer(secilenHarf) {
     let sonrakiSoru = "";
 
     if (secilenHarf === soru.dogruCevap) {
-        ogrenciSkoru++;
-        sonrakiSoru = soru.dogruBilirsek;
+        // DOĞRU BİLİNDİ
+        if (!aktifSoruKey.includes("telafi")) {
+            ogrenciSkoru++; // Sadece ana soruysa puan ver
+        }
+        
+        guncelSoruIndeksi++; 
+        if (guncelSoruIndeksi < rastgeleSoruSirasi.length) {
+            sonrakiSoru = rastgeleSoruSirasi[guncelSoruIndeksi];
+        } else {
+            sonrakiSoru = "s5_bitis_karne";
+        }
     } else {
-        sonrakiSoru = soru.yanlisBilirsek;
-    }
-
-    if (!sonrakiSoru) {
-        sonrakiSoru = "s5_bitis_karne";
+        // YANLIŞ BİLİNDİ
+        if (!aktifSoruKey.includes("telafi")) {
+            // Ana soruda yanlış, hemen telafisine at
+            sonrakiSoru = aktifSoruKey + "_telafi";
+        } else {
+            // Telafide de yanlışsa bir sonraki ana soruya geç
+            guncelSoruIndeksi++;
+            if (guncelSoruIndeksi < rastgeleSoruSirasi.length) {
+                sonrakiSoru = rastgeleSoruSirasi[guncelSoruIndeksi];
+            } else {
+                sonrakiSoru = "s5_bitis_karne";
+            }
+        }
     }
 
     adaptifTestiBaslat(sonrakiSoru, aktifTip);
@@ -375,7 +438,6 @@ function profileVerileriIsle(modulAdi, dogruSayisi) {
                 let data = doc.data();
                 let mevcutModuller = data.tamamlanan_moduller || [];
 
-                // Öğrenci bu modülü daha önce tamamlamış mı?
                 let modulZatenVar = mevcutModuller.includes(modulAdi);
 
                 let guncellemeVerisi = {
@@ -384,7 +446,6 @@ function profileVerileriIsle(modulAdi, dogruSayisi) {
                     son_seviye: yeniSeviye 
                 };
 
-                // Eğer modül listede YOKSA, ekle. Varsa dokunma.
                 if (!modulZatenVar) {
                     guncellemeVerisi.tamamlanan_moduller = firebase.firestore.FieldValue.arrayUnion(modulAdi);
                 }
@@ -400,9 +461,9 @@ function profileVerileriIsle(modulAdi, dogruSayisi) {
         });
     }
 }
+
 function yapayZekaKarnesiniGoster() {
-    // Test bittiğinde Firebase güncellemesini başlat!
-    let bitenModul = (aktifTip === "nicelik") ? "5. Sınıf Geometrik Nicelikler" : "5. Sınıf Geometrik Şekiller ve Açılar";
+    let bitenModul = (aktifTip === "nicelik") ? "5. Sınıf Geometrik Nicelikler" : "5. Sınıf Geometrik Şekiller";
     profileVerileriIsle(bitenModul, ogrenciSkoru);
 
     let soruKutusu = document.getElementById("soruKutusu");
@@ -448,7 +509,6 @@ function yapayZekaKarnesiniGoster() {
 }
 
 //Firebase Veritabanından Öğrenci Profilini Orta Ekrana Çeken Fonksiyon
-
 function ogrenciProfiliniGoster() {
     if (typeof firebase === 'undefined' || !firebase.auth().currentUser) {
         alert("Profilinizi görmek için lütfen GEOWEB AI sistemine giriş yapın.");
@@ -461,7 +521,6 @@ function ogrenciProfiliniGoster() {
         if (doc.exists) {
             let data = doc.data();
             
-            // "boş" kelimesini tespit edip listeden temizleme
             let temizModuller = [];
             if (data.tamamlanan_moduller && Array.isArray(data.tamamlanan_moduller)) {
                 temizModuller = data.tamamlanan_moduller.filter(modul => modul !== "boş" && modul.trim() !== "");
@@ -471,10 +530,8 @@ function ogrenciProfiliniGoster() {
                                ? "✔️ " + temizModuller.join("<br>✔️ ")
                                : "Henüz modül tamamlanmadı.";
 
-            // Son giriş saati veritabanından çekme
             let sonGiris = data.son_giris_tarihi || "Henüz kaydedilmedi";
 
-            // ekranda açık bir profil varsa önce onu temizleme
             let eskiModal = document.getElementById("daireProfilModal");
             if(eskiModal) eskiModal.remove();
 
