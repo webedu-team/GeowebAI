@@ -1,3 +1,4 @@
+// --- GEOWEBAI: ADAPTİF ÖĞRENME MOTORU ---
 
 // MAARİF MODELİ GÜNCEL KONU LİSTESİ
 const sinifKonulari = {
@@ -32,6 +33,7 @@ let ogrenciSkoru = 0;
 let toplamCozulen = 0;
 let aktifSoruKey = "";
 let aktifTip = "";
+let aktifKonuId = "";
 
 // --- DİNAMİK SIRALAMA DEĞİŞKENLERİ ---
 let rastgeleSoruSirasi = [];
@@ -133,6 +135,11 @@ const soruHavuzu_s5_sekil = {
         metin: "Soru 10/10 (Uzman Seviye)\n\nBir dik üçgende dik açılardan biri 35° ise, diğer dar açının ölçüsü kaç derecedir?",
         secenekler: { A: "45°", B: "55°", C: "65°", D: "90°" },
         dogruCevap: "B"
+    },
+    "s5_q10_telafi": {
+        metin: "<div style='background: linear-gradient(135deg, #f7b733 0%, #fc4a1a 100%); color: white; padding: 8px; border-radius: 6px; margin-bottom: 6px; font-size: 13px;'>🔍 ANALİZ: Dik üçgende dar açıların toplamı 90 derecedir (90 - 35 = 55).<br>💡 <b>AI Önerisi:</b> Sitemizdeki geometri <b>Oyunlarını</b> oynayarak pratik yapabilirsin.</div>Soru 10 - Telafi\n\nBir dik üçgende dar açılardan biri 40° ise, diğer dar açı kaç derecedir?",
+        secenekler: { A: "40°", B: "50°", C: "60°", D: "90°" },
+        dogruCevap: "B"
     }
 };
 
@@ -232,6 +239,11 @@ const soruHavuzu_s5_nicelik = {
         metin: "Soru 10/10 (Uzman Seviye - Bileşik Alan)\n\nAlanları eşit olan iki şekilden birisi kenarları 9 cm ve 4 cm olan bir dikdörtgendir. Diğer şekil bir kare ise, bu karenin bir kenarı kaç cm'dir?",
         secenekler: { A: "4 cm", B: "6 cm", C: "9 cm", D: "36 cm" },
         dogruCevap: "B"
+    },
+    "s5n_q10_telafi": {
+        metin: "<div style='background: linear-gradient(135deg, #f7b733 0%, #fc4a1a 100%); color: white; padding: 8px; border-radius: 6px; margin-bottom: 6px; font-size: 13px;'>🔍 ANALİZ: Dikdörtgenin alanı 9x4=36 cm²'dir. Karenin de alanı 36 ise bir kenarı 6 cm olmalıdır.<br>💡 <b>AI Önerisi:</b> Sitemizdeki geometri <b>Oyunlarını</b> oynayarak pratik yapabilirsin.</div>Soru 10 - Telafi\n\nAlanları eşit iki şekilden biri 8 cm ve 2 cm kenarlarına sahip dikdörtgendir. Diğeri kare ise, bu karenin bir kenarı kaç cm'dir?",
+        secenekler: { A: "4 cm", B: "8 cm", C: "16 cm", D: "32 cm" },
+        dogruCevap: "A"
     }
 };
 
@@ -295,14 +307,12 @@ function sinifSec(sinifDuzeyi) {
 
     konular.forEach(konu => {
         if (sinifDuzeyi === 5) {
-            // Sadece 5. Sınıf aktif modülleri
             html += `
                 <button onclick="konuSec('${konu.id}')" style="background: rgba(0, 0, 0, 0.4); color: white; border: 1px solid ${renk.border}; padding: 10px 14px; border-radius: 6px; cursor: pointer; font-size: 13px; font-weight: bold; text-align: left; box-shadow: 0 2px 4px rgba(0,0,0,0.3); transition: 0.2s;">
                     🔹 ${konu.ad}
                 </button>
             `;
         } else {
-            // 6, 7 ve 8. Sınıf kilitli modülleri
             html += `
                 <button onclick="alert('Bu modül şu an yapım aşamasındadır. TEKNOFEST prototipinde sadece 5. Sınıf konuları aktiftir.')" style="background: rgba(0, 0, 0, 0.6); color: #aaaaaa; border: 1px dashed #777777; padding: 10px 14px; border-radius: 6px; cursor: not-allowed; font-size: 13px; font-weight: bold; text-align: left; box-shadow: inset 0 2px 4px rgba(0,0,0,0.5);">
                     🔒 ${konu.ad} <span style="font-size: 10px; color: #ff8b7d; float: right; margin-top: 2px;">(Yakında)</span>
@@ -315,14 +325,41 @@ function sinifSec(sinifDuzeyi) {
     soruKutusu.innerHTML = html;
 }
 
-// Konu Seçimi ve Başlatma (Karıştırma Algoritması)
+// 1) Firebase Giriş Kontrolü ve Yönlendirme (Maksimum 2 Deneme Mantığı)
 function konuSec(konuId) {
+    if (typeof firebase === 'undefined' || !firebase.auth().currentUser) {
+        baslatTestHazirlik(konuId); // Sistemde giriş yapılmamışsa doğrudan başlat (prototip gösterimi için)
+        return;
+    }
+
+    let user = firebase.auth().currentUser;
+    let dbRef = firebase.firestore().collection("ogrenci_bilgileri").doc(user.email);
+
+    dbRef.get().then((doc) => {
+        if (doc.exists) {
+            let data = doc.data();
+            let denemeSayisi = (data.modul_denemeleri && data.modul_denemeleri[konuId]) ? data.modul_denemeleri[konuId] : 0;
+
+            if (denemeSayisi >= 2) {
+                alert("Bu modül için maksimum tekrar hakkınızı (2/2) doldurdunuz. Lütfen diğer modülleri deneyin!");
+                return; // Öğrenci içeri alınmaz, haksız puan kazanımı önlenir
+            }
+        }
+        baslatTestHazirlik(konuId); 
+    }).catch((error) => {
+        console.error("Yetki kontrol hatası:", error);
+        baslatTestHazirlik(konuId); 
+    });
+}
+
+// 2) Soru Dizisini Hazırlama ve Fisher-Yates Kusursuz Karıştırma 
+function baslatTestHazirlik(konuId) {
     ogrenciSkoru = 0;
     toplamCozulen = 0;
     guncelSoruIndeksi = 0;
+    aktifKonuId = konuId; 
 
     let anaSorular = [];
-    
     if (konuId === "s5_sekil") {
         aktifTip = "sekil";
         anaSorular = ["s5_q1", "s5_q2", "s5_q3", "s5_q4", "s5_q5", "s5_q6", "s5_q7", "s5_q8", "s5_q9", "s5_q10"];
@@ -331,10 +368,13 @@ function konuSec(konuId) {
         anaSorular = ["s5n_q1", "s5n_q2", "s5n_q3", "s5n_q4", "s5n_q5", "s5n_q6", "s5n_q7", "s5n_q8", "s5n_q9", "s5n_q10"];
     }
 
-    // Soruların rasgele gelmesi için
-    rastgeleSoruSirasi = anaSorular.sort(() => Math.random() - 0.5);
-
-    // Karışmış dizinin ilk sorusundan başlatmak için
+    // Stabilite sorunları yaratan Math.random sort'u yerine kusursuz Fisher-Yates algoritması
+    for (let i = anaSorular.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [anaSorular[i], anaSorular[j]] = [anaSorular[j], anaSorular[i]];
+    }
+    
+    rastgeleSoruSirasi = anaSorular;
     adaptifTestiBaslat(rastgeleSoruSirasi[0], aktifTip);
 }
 
@@ -353,7 +393,6 @@ function adaptifTestiBaslat(soruKey, tip) {
     let soruKutusu = document.getElementById("soruKutusu");
     if (!soruKutusu) return;
 
-    // Metindeki soru numarasını dinamik yapmak için
     let metin = soru.metin;
     if (!aktifSoruKey.includes("telafi")) {
         metin = metin.replace(/Soru \d+\/10/, `Soru ${guncelSoruIndeksi + 1}/10`);
@@ -384,7 +423,7 @@ function adaptifTestiBaslat(soruKey, tip) {
     `;
 }
 
-// Cevap Kontrolleri (Dinamik Akış Kontrolü)
+// Cevap Kontrolleri (Hata Önleyici/Failsafe Akış Kontrolü)
 function cevapVer(secilenHarf) {
     let aktifHavuz = (aktifTip === "nicelik") ? soruHavuzu_s5_nicelik : soruHavuzu_s5_sekil;
     let soru = aktifHavuz[aktifSoruKey];
@@ -407,8 +446,20 @@ function cevapVer(secilenHarf) {
     } else {
         // YANLIŞ BİLİNDİ
         if (!aktifSoruKey.includes("telafi")) {
-            // Ana soruda yanlış, hemen telafisine at
-            sonrakiSoru = aktifSoruKey + "_telafi";
+            // Ana soruda yanlış yapıldı, telafisine yolla
+            let beklenenTelafiKey = aktifSoruKey + "_telafi";
+            
+            // Failsafe Kalkanı: Eğer bir sebepten telafi sorusu yoksa sistemi kilitlenme
+            if (aktifHavuz[beklenenTelafiKey]) {
+                sonrakiSoru = beklenenTelafiKey;
+            } else {
+                guncelSoruIndeksi++;
+                if (guncelSoruIndeksi < rastgeleSoruSirasi.length) {
+                    sonrakiSoru = rastgeleSoruSirasi[guncelSoruIndeksi];
+                } else {
+                    sonrakiSoru = "s5_bitis_karne";
+                }
+            }
         } else {
             // Telafide de yanlışsa bir sonraki ana soruya geç
             guncelSoruIndeksi++;
@@ -423,34 +474,48 @@ function cevapVer(secilenHarf) {
     adaptifTestiBaslat(sonrakiSoru, aktifTip);
 }
 
-//Firebase'de öğrenci bilgilerini tutan Veritabanını Güncelleme İşlemi 
+// 3) Firebase'de Puanı "Üstüne Yazan" Sınırlandırılmış Veri İşleme
 function profileVerileriIsle(modulAdi, dogruSayisi) {
     if (typeof firebase !== 'undefined' && firebase.auth().currentUser) {
         let user = firebase.auth().currentUser;
         let dbRef = firebase.firestore().collection("ogrenci_bilgileri").doc(user.email);
 
-        let kazanilanPuan = dogruSayisi * 10;
+        let yeniPuan = dogruSayisi * 10;
         let yeniSeviye = dogruSayisi >= 8 ? "İleri" : (dogruSayisi >= 5 ? "Orta" : "Başlangıç");
 
         dbRef.get().then((doc) => {
             if (doc.exists) {
                 let data = doc.data();
+                
+                let modulDenemeleri = data.modul_denemeleri || {};
+                let modulPuanlari = data.modul_puanlari || {};
                 let mevcutModuller = data.tamamlanan_moduller || [];
 
-                let modulZatenVar = mevcutModuller.includes(modulAdi);
+                let oncekiDenemeSayisi = modulDenemeleri[aktifKonuId] || 0;
+                let yeniDenemeSayisi = oncekiDenemeSayisi + 1;
+
+                // Eski puanı çıkarıp yeni puanı ekleyerek haksız kazancı önlüyoruz
+                let oncekiPuan = modulPuanlari[aktifKonuId] || 0;
+                let mevcutToplamPuan = data.puan || 0;
+                let guncelToplamPuan = mevcutToplamPuan - oncekiPuan + yeniPuan;
 
                 let guncellemeVerisi = {
-                    cozulen_soru_sayisi: firebase.firestore.FieldValue.increment(10), 
-                    puan: firebase.firestore.FieldValue.increment(kazanilanPuan), 
-                    son_seviye: yeniSeviye 
+                    puan: guncelToplamPuan,
+                    son_seviye: yeniSeviye,
+                    [`modul_denemeleri.${aktifKonuId}`]: yeniDenemeSayisi,
+                    [`modul_puanlari.${aktifKonuId}`]: yeniPuan
                 };
 
-                if (!modulZatenVar) {
-                    guncellemeVerisi.tamamlanan_moduller = firebase.firestore.FieldValue.arrayUnion(modulAdi);
+                // Eğer bu modülü İLK KEZ çözüyorsa listeye ekle ve soru sayısını 10 artır
+                if (yeniDenemeSayisi === 1) {
+                    guncellemeVerisi.cozulen_soru_sayisi = firebase.firestore.FieldValue.increment(10);
+                    if (!mevcutModuller.includes(modulAdi)) {
+                        guncellemeVerisi.tamamlanan_moduller = firebase.firestore.FieldValue.arrayUnion(modulAdi);
+                    }
                 }
 
                 dbRef.update(guncellemeVerisi).then(() => {
-                    console.log("Firebase: Öğrenci verileri başarıyla güncellendi!");
+                    console.log("Firebase: Sınırlandırılmış veriler başarıyla güncellendi!");
                 }).catch((error) => {
                     console.error("Firebase güncelleme hatası: ", error);
                 });
