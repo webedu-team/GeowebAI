@@ -1,4 +1,4 @@
-// --- GEOWEBAI: ADAPTİF ÖĞRENME MOTORU ---
+
 
 // MAARİF MODELİ GÜNCEL KONU LİSTESİ
 const sinifKonulari = {
@@ -342,7 +342,7 @@ function konuSec(konuId) {
 
             if (denemeSayisi >= 2) {
                 alert("Bu modül için maksimum tekrar hakkınızı (2/2) doldurdunuz. Lütfen diğer modülleri deneyin!");
-                return; // Öğrenci içeri alınmaz, haksız puan kazanımı önlenir
+                return; // Öğrenci içeri alınmaz, haksız puan kazanımını önlüyoruz
             }
         }
         baslatTestHazirlik(konuId); 
@@ -352,7 +352,7 @@ function konuSec(konuId) {
     });
 }
 
-// 2) Soru Dizisini Hazırlama ve Fisher-Yates Kusursuz Karıştırma 
+// 2) Soru Dizisini Hazırlama ve Karıştırma 
 function baslatTestHazirlik(konuId) {
     ogrenciSkoru = 0;
     toplamCozulen = 0;
@@ -368,7 +368,6 @@ function baslatTestHazirlik(konuId) {
         anaSorular = ["s5n_q1", "s5n_q2", "s5n_q3", "s5n_q4", "s5n_q5", "s5n_q6", "s5n_q7", "s5n_q8", "s5n_q9", "s5n_q10"];
     }
 
-    // Stabilite sorunları yaratan Math.random sort'u yerine kusursuz Fisher-Yates algoritması
     for (let i = anaSorular.length - 1; i > 0; i--) {
         const j = Math.floor(Math.random() * (i + 1));
         [anaSorular[i], anaSorular[j]] = [anaSorular[j], anaSorular[i]];
@@ -423,7 +422,7 @@ function adaptifTestiBaslat(soruKey, tip) {
     `;
 }
 
-// Cevap Kontrolleri (Hata Önleyici/Failsafe Akış Kontrolü)
+// Cevap Kontrolleri (Hata Önleyici/ Akış Kontrolü)
 function cevapVer(secilenHarf) {
     let aktifHavuz = (aktifTip === "nicelik") ? soruHavuzu_s5_nicelik : soruHavuzu_s5_sekil;
     let soru = aktifHavuz[aktifSoruKey];
@@ -446,10 +445,10 @@ function cevapVer(secilenHarf) {
     } else {
         // YANLIŞ BİLİNDİ
         if (!aktifSoruKey.includes("telafi")) {
-            // Ana soruda yanlış yapıldı, telafisine yolla
+            // Ana soruda yanlış yapıldıysa, telafisine yollayolluyoruz
             let beklenenTelafiKey = aktifSoruKey + "_telafi";
             
-            // Failsafe Kalkanı: Eğer bir sebepten telafi sorusu yoksa sistemi kilitlenme
+            //  Eğer bir sebepten telafi sorusu yoksa sistemi kilitlenme
             if (aktifHavuz[beklenenTelafiKey]) {
                 sonrakiSoru = beklenenTelafiKey;
             } else {
@@ -474,7 +473,7 @@ function cevapVer(secilenHarf) {
     adaptifTestiBaslat(sonrakiSoru, aktifTip);
 }
 
-// 3) Firebase'de Puanı "Üstüne Yazan" Sınırlandırılmış Veri İşleme
+// 3) Firebase'de Puanı "Üstüne Yazan"  Veri İşleme
 function profileVerileriIsle(modulAdi, dogruSayisi) {
     if (typeof firebase !== 'undefined' && firebase.auth().currentUser) {
         let user = firebase.auth().currentUser;
@@ -494,7 +493,7 @@ function profileVerileriIsle(modulAdi, dogruSayisi) {
                 let oncekiDenemeSayisi = modulDenemeleri[aktifKonuId] || 0;
                 let yeniDenemeSayisi = oncekiDenemeSayisi + 1;
 
-                // Eski puanı çıkarıp yeni puanı ekleyerek haksız kazancı önlüyoruz
+                // Eski puanı çıkarıp yeni puanı ekleyerek haksız kazancı önlüyoruz 
                 let oncekiPuan = modulPuanlari[aktifKonuId] || 0;
                 let mevcutToplamPuan = data.puan || 0;
                 let guncelToplamPuan = mevcutToplamPuan - oncekiPuan + yeniPuan;
