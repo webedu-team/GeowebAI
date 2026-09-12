@@ -1,4 +1,3 @@
-// --- GEOWEBAI: ADAPTİF ÖĞRENME MOTORU ---
 
 // MAARİF MODELİ GÜNCEL KONU LİSTESİ
 const sinifKonulari = {
@@ -332,14 +331,14 @@ function konuSec(konuId) {
         anaSorular = ["s5n_q1", "s5n_q2", "s5n_q3", "s5n_q4", "s5n_q5", "s5n_q6", "s5n_q7", "s5n_q8", "s5n_q9", "s5n_q10"];
     }
 
-    // Soruları rastgele karıştırıyoruz
+    // Soruların rasgele gelmesi için
     rastgeleSoruSirasi = anaSorular.sort(() => Math.random() - 0.5);
 
-    // Karışmış dizinin ilk sorusundan başlatıyoruz
+    // Karışmış dizinin ilk sorusundan başlatmak için
     adaptifTestiBaslat(rastgeleSoruSirasi[0], aktifTip);
 }
 
-// Adaptif Soruyu Ekrana Basma (Dinamik Soru Numarası)
+// Adaptif Soruyu Ekrana Yazdırmak için (Dinamik Soru Numarası)
 function adaptifTestiBaslat(soruKey, tip) {
     aktifSoruKey = soruKey;
     aktifTip = tip;
@@ -354,7 +353,7 @@ function adaptifTestiBaslat(soruKey, tip) {
     let soruKutusu = document.getElementById("soruKutusu");
     if (!soruKutusu) return;
 
-    // Metindeki soru numarasını dinamik yapma
+    // Metindeki soru numarasını dinamik yapmak için
     let metin = soru.metin;
     if (!aktifSoruKey.includes("telafi")) {
         metin = metin.replace(/Soru \d+\/10/, `Soru ${guncelSoruIndeksi + 1}/10`);
@@ -396,7 +395,7 @@ function cevapVer(secilenHarf) {
     if (secilenHarf === soru.dogruCevap) {
         // DOĞRU BİLİNDİ
         if (!aktifSoruKey.includes("telafi")) {
-            ogrenciSkoru++; // Sadece ana soruysa puan ver
+            ogrenciSkoru++; 
         }
         
         guncelSoruIndeksi++; 
@@ -424,7 +423,7 @@ function cevapVer(secilenHarf) {
     adaptifTestiBaslat(sonrakiSoru, aktifTip);
 }
 
-//Firebase Veritabanı Güncelleme İşlemi 
+//Firebase'de öğrenci bilgilerini tutan Veritabanını Güncelleme İşlemi 
 function profileVerileriIsle(modulAdi, dogruSayisi) {
     if (typeof firebase !== 'undefined' && firebase.auth().currentUser) {
         let user = firebase.auth().currentUser;
@@ -508,7 +507,7 @@ function yapayZekaKarnesiniGoster() {
     `;
 }
 
-//Firebase Veritabanından Öğrenci Profilini Orta Ekrana Çeken Fonksiyon
+//Firebase Veritabanından Öğrenci Profilini Orta Ekrana Getiren Fonksiyon
 function ogrenciProfiliniGoster() {
     if (typeof firebase === 'undefined' || !firebase.auth().currentUser) {
         alert("Profilinizi görmek için lütfen GEOWEB AI sistemine giriş yapın.");
